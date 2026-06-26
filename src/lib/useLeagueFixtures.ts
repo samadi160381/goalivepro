@@ -5,11 +5,10 @@ import { normalizeFixture } from "@/lib/normalize";
 
 const DEFAULT_SEASON = Number(process.env.NEXT_PUBLIC_DEFAULT_SEASON) || 2024;
 
-export function useLeagueFixtures(leagueId, direction, count) {
-  if (count === undefined) count = 20;
-  const [matches, setMatches] = useState([]);
+export function useLeagueFixtures(leagueId: number, direction: string, count: number = 20) {
+  const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
 
   async function load() {
