@@ -5,7 +5,11 @@ import { normalizeFixture } from "@/lib/normalize";
 
 const DEFAULT_SEASON = Number(process.env.NEXT_PUBLIC_DEFAULT_SEASON) || 2024;
 
-export function useLeagueFixtures(leagueId: number, direction: string, count: number = 20) {
+export function useLeagueFixtures(
+  leagueId: number,
+  direction: "last" | "next",
+  count: number = 20
+) {
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,13 +19,15 @@ export function useLeagueFixtures(leagueId: number, direction: string, count: nu
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/league/" + leagueId + "/fixtures?direction=" + direction + "&season=" + DEFAULT_SEASON + "&count=" + count);
+      const url = "/api/league/" + leagueId + "/fixtures?direction=" + direction + "&season=" + DEFAULT_SEASON + "&count=" + count;
+      const res = await fetch(url);
       const json = await res.json();
       if (res.status === 429) {
         setQuotaExceeded(true);
         if (json.fixtures) setMatches(json.fixtures.map(normalizeFixture));
         return;
       }
+      if (!res.ok) {
         setError(json.message || "Could not load this league.");
         return;
       }
@@ -34,7 +40,9 @@ export function useLeagueFixtures(leagueId: number, direction: string, count: nu
     }
   }
 
-  useEffect(function() { load(); }, [leagueId, direction, count]);
+  useEffect(() => {
+    load();
+  }, [leagueId, direction, count]);
 
   return { matches, loading, error, quotaExceeded, refresh: load };
 }
