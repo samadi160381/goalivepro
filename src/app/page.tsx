@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { AppFrame, type TabKey } from '@/components/AppFrame';
 import { LiveView } from '@/components/views/LiveView';
+import { LiveOnlyView } from '@/components/views/LiveOnlyView';
 import { FixturesView } from '@/components/views/FixturesView';
 import { StandingsView } from '@/components/views/StandingsView';
 import { MatchDetail } from '@/components/MatchDetail';
@@ -39,8 +40,8 @@ export default function Home() {
 
   return (
     <AppFrame activeTab={tab} onTabChange={handleTabChange}>
-      {tab === 'live' && <LiveView onOpenMatch={setOpenMatchId} />}
-      {tab === 'today' && <FixturesView onOpenMatch={setOpenMatchId} />}
+      {tab === 'live' && <LiveOnlyView onOpenMatch={setOpenMatchId} />}
+      {tab === 'today' && <LiveView onOpenMatch={setOpenMatchId} />}
       {tab === 'fixtures' && <FixturesView onOpenMatch={setOpenMatchId} />}
       {tab === 'standings' && <StandingsView />}
     </AppFrame>
