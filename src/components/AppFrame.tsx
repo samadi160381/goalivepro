@@ -6,7 +6,7 @@ import { useApp } from '@/components/AppProviders';
 import { MoonIcon, SunIcon } from '@/components/icons';
 import type { Lang } from '@/lib/i18n';
 
-export type TabKey = 'live' | 'fixtures' | 'standings';
+export type TabKey = 'live' | 'today' | 'fixtures' | 'standings';
 
 export function AppFrame({
   activeTab,
