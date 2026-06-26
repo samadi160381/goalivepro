@@ -232,3 +232,11 @@ export const LEAGUE_IDS = {
   bundesliga: 78,
   ligue1: 61
 } as const;
+
+export async function getFixturesByLeague(leagueId: number, season: number) {
+  return fetchFromApi<any[]>(
+    '/fixtures',
+    { league: leagueId, season },
+    FIXTURES_TTL_MS
+  );
+}
