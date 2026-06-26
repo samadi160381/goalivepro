@@ -52,6 +52,9 @@ export function AppFrame({
       <nav className="tabnav">
         <button className={`tab ${activeTab === 'live' ? 'active' : ''}`} onClick={() => onTabChange('live')}>
           {t('tabLive')}
+          </button>
+          <button className={`tab ${activeTab === 'today' ? 'active' : ''}`} onClick={() => onTabChange('today')}>
+            Today
         </button>
         <button className={`tab ${activeTab === 'fixtures' ? 'active' : ''}`} onClick={() => onTabChange('fixtures')}>
           {t('tabFixtures')}
