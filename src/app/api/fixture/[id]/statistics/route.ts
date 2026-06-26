@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getFixtureStatistics } from '@/lib/apiFootball';
-import { handleApiError } from '@/app/api/scores/route';
+import { handleApiError } from '@/lib/apiErrors';
 
 export async function GET(
   _req: NextRequest,

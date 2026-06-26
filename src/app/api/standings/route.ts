@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getStandings } from '@/lib/apiFootball';
-import { handleApiError } from '@/app/api/scores/route';
+import { handleApiError } from '@/lib/apiErrors';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
