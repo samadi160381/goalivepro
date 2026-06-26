@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <AppFrame activeTab={tab} onTabChange={handleTabChange}>
       {tab === 'live' && <LiveView onOpenMatch={setOpenMatchId} />}
-      {tab === 'today' && <FixturesView onOpenMatch={setOpenMatchId} today={true} />}
+      {tab === 'today' && <FixturesView onOpenMatch={setOpenMatchId} />}
       {tab === 'fixtures' && <FixturesView onOpenMatch={setOpenMatchId} />}
       {tab === 'standings' && <StandingsView />}
     </AppFrame>
