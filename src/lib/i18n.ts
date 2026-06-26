@@ -58,7 +58,7 @@ export const I18N: Record<Lang, Dict> = {
   en: {
     dir: 'ltr',
     brandName: 'ScorePulse',
-    tabLive: 'Live & today',
+    tabLive: 'Live',
     tabFixtures: 'Fixtures',
     tabStandings: 'Standings',
     footerNote: 'Live data via API-Football',
