@@ -1,5 +1,4 @@
 'use client';
-// src/lib/useLeagueFixtures.ts
 
 import { useEffect, useState } from 'react';
 import { normalizeFixture } from '@/lib/normalize';
@@ -19,7 +18,7 @@ export function useLeagueFixtures(leagueId: number, direction: 'last' | 'next', 
     setError(null);
     try {
       const res = await fetch(
-        `/api/league/${leagueId}/fixtures?direction=${direction}&season=${DEFAULT_SEASON}&count=${count}`
+        '/api/league/' + leagueId + '/fixtures?direction=' + direction + '&season=' + DEFAULT_SEASON + '&count=' + count
       );
       const json = await res.json();
       if (res.status === 429) {
@@ -41,7 +40,6 @@ export function useLeagueFixtures(leagueId: number, direction: 'last' | 'next', 
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leagueId, direction, count]);
 
   return { matches, loading, error, quotaExceeded, refresh: load };
