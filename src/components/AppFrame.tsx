@@ -49,7 +49,7 @@ export default function AppFrame({ activeTab, onTabChange, children }: Props) {
         <div style={{ display: "flex", gap: 2, background: "#0d1b35", borderRadius: 10, padding: 3, border: "1px solid #1e3a5f" }}>
           {SPORTS.map(s => (
             <button key={s.key} onClick={() => setSport(s.key)} style={{ padding: "5px 12px", borderRadius: 7, border: "none", background: sport === s.key ? "linear-gradient(135deg, #2563eb, #1d4ed8)" : "none", color: sport === s.key ? "#fff" : "#64748b", cursor: "pointer", fontSize: 12, fontWeight: sport === s.key ? 700 : 400, display: "flex", alignItems: "center", gap: 4, transition: "all 0.15s", whiteSpace: "nowrap" }}>
-              <span>{s.icon}</span><span style={{ display: window?.innerWidth > 768 ? "inline" : "none" }}>{s.label}</span>
+              <span>{s.icon}</span><span style={{ display: "inline" }}>{s.label}</span>
             </button>
           ))}
         </div>
