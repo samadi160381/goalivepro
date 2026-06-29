@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { UiMatch } from "@/lib/types";
 import { useLeagueFixtures } from "@/lib/useLeagueFixtures";
 interface League { id: number; name: string; logo: string; country?: string; }
-interface Props { league: League; season?: number | string; onBack?: () => void; }
+interface Props { league: League; season?: number | string; onBack?: () => void; onMatchClick?: (id: number) => void; }
 type SubTab = "summary" | "results" | "fixtures" | "standings";
 function statusLabel(m: UiMatch): string { if (m.status === "ft") return "FT"; if (m.status === "ht") return "HT"; if (m.status === "live") return m.minute ? `${m.minute}'` : "LIVE"; return new Date(m.kickoffIso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }); }
 function MatchCard({ m }: { m: UiMatch }) { const live = m.status === "live" || m.status === "ht"; return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderBottom: "1px solid #2a2a2a", gap: 8 }}><div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, justifyContent: "flex-end" }}><span style={{ fontSize: 14 }}>{m.home.name}</span><img src={m.home.logo} alt="" width={20} height={20} style={{ objectFit: "contain" }} /></div><div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 64 }}>{m.homeScore !== null && m.awayScore !== null ? <span style={{ fontSize: 18, fontWeight: 700, color: live ? "#22c55e" : "inherit" }}>{m.homeScore} – {m.awayScore}</span> : <span style={{ color: "#888" }}>vs</span>}<span style={{ fontSize: 11, color: live ? "#22c55e" : "#888" }}>{statusLabel(m)}</span></div><div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1 }}><img src={m.away.logo} alt="" width={20} height={20} style={{ objectFit: "contain" }} /><span style={{ fontSize: 14 }}>{m.away.name}</span></div></div>; }
@@ -38,3 +38,4 @@ export default function LeagueView({ league, season = 2024, onBack }: Props) {
     </div>
   </div>;
 }
+// onMatchClick stub
