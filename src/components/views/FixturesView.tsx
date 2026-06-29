@@ -60,3 +60,5 @@ export function FixturesView({ onOpenMatch }: { onOpenMatch: (id: number) => voi
     </div>
   );
 }
+
+export default FixturesView;

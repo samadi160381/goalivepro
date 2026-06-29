@@ -86,3 +86,5 @@ export function StandingsView() {
     </div>
   );
 }
+
+export default StandingsView;

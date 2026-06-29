@@ -1,48 +1,32 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { normalizeFixture } from "@/lib/normalize";
-
-const DEFAULT_SEASON = Number(process.env.NEXT_PUBLIC_DEFAULT_SEASON) || 2024;
-
-export function useLeagueFixtures(
-  leagueId: number,
-  direction: "last" | "next",
-  count: number = 20
-) {
-  const [matches, setMatches] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+import { useState, useEffect, useCallback } from "react";
+import { UiMatch } from "@/lib/types";
+export interface LeagueFixturesState { upcoming: UiMatch[]; results: UiMatch[]; live: UiMatch[]; loading: boolean; error: string | null; refresh: () => void; }
+function isLive(m: UiMatch): boolean { return m.status === "live" || m.status === "ht"; }
+function isFinished(m: UiMatch): boolean { return m.status === "ft"; }
+export function useLeagueFixtures(leagueId: number | null, season: number | string = 2024): LeagueFixturesState {
+  const [upcoming, setUpcoming] = useState<UiMatch[]>([]);
+  const [results, setResults] = useState<UiMatch[]>([]);
+  const [live, setLive] = useState<UiMatch[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [quotaExceeded, setQuotaExceeded] = useState(false);
-
-  async function load() {
-    setLoading(true);
-    setError(null);
-    try {
-      const url = "/api/league/" + leagueId + "/fixtures?direction=" + direction + "&season=" + DEFAULT_SEASON + "&count=" + count;
-      const res = await fetch(url);
-      const json = await res.json();
-      if (res.status === 429) {
-        setQuotaExceeded(true);
-        if (json.fixtures) setMatches(json.fixtures.map(normalizeFixture));
-        return;
-      }
-      if (!res.ok) {
-        setError(json.message || "Could not load this league.");
-        return;
-      }
-      setQuotaExceeded(false);
-      setMatches(json.fixtures.map(normalizeFixture));
-    } catch (e) {
-      setError("Network error while loading this league.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  const [tick, setTick] = useState(0);
+  const refresh = useCallback(() => setTick((t) => t + 1), []);
   useEffect(() => {
-    load();
-  }, [leagueId, direction, count]);
-
-  return { matches, loading, error, quotaExceeded, refresh: load };
+    if (leagueId === null) return;
+    let cancelled = false;
+    setLoading(true); setError(null);
+    fetch(`/api/scores?league=${leagueId}&season=${season}`)
+      .then(async (res) => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
+      .then((data) => {
+        if (cancelled) return;
+        const all: UiMatch[] = data.matches ?? data.fixtures ?? data.response ?? [];
+        setLive(all.filter(isLive));
+        setResults(all.filter(isFinished).sort((a, b) => new Date(b.kickoffIso).getTime() - new Date(a.kickoffIso).getTime()));
+        setUpcoming(all.filter((m) => !isLive(m) && !isFinished(m)).sort((a, b) => new Date(a.kickoffIso).getTime() - new Date(b.kickoffIso).getTime()));
+        setLoading(false);
+      })
+      .catch((err: Error) => { if (cancelled) return; setError(err.message); setLoading(false); });
+    return () => { cancelled = true; };
+  }, [leagueId, season, tick]);
+  return { upcoming, results, live, loading, error, refresh };
 }
